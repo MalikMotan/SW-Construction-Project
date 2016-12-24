@@ -4,9 +4,9 @@
 
 ##Actions
 ###We discussed the project and elicited requirements to start the design phase. After that, we divided the tasks between us to start working. The task distribution went as follows:
-*Malik: Build the use case diagram and write a full test case.
-*Ayman: Build the class diagram and write a full test case.
-*Raed:  Build the activity diagram and write a full test case.
+* Malik: Build the use case diagram and write a full test case.
+* Ayman: Build the class diagram and write a full test case.
+* Raed:  Build the activity diagram and write a full test case.
 
 ###The group agreed Malik should create a github repository to to host the design documents.
 
