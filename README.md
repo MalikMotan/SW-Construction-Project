@@ -2,6 +2,6 @@
 This repository consists of SW Construction Project documents.
 
 #Students working on the project
-1-Malik Motan
-2- Ayman Mafarja
-3- Raed Hijjawi
+* Malik Motan
+* Ayman Mafarja
+* Raed Hijjawi
