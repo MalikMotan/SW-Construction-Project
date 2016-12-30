@@ -11,4 +11,4 @@
 ###The group agreed Malik should create a github repository to to host the design documents.
 
 ##Next Meeting Agenda
-The group agreed to meet on Saturday Dec. 24th 2016 at 6 p.m. to review the final work before submission.
+The group agreed to meet on Wednesday Dec. 28th 2016 at 6 p.m. to review the final work before submission.
