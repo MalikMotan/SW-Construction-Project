@@ -24,12 +24,18 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.log4j.Logger;
+
 import data.ManifestFile;
 import data.Segment;
 import multipart.Multipart;
 import sequence.FileSequenceReader;
 
 public class Main extends JFrame {
+	
+	/** Logger used for testing and debugging purposes */
+	final static Logger logger = Logger.getLogger(Main.class);
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -51,8 +57,8 @@ public class Main extends JFrame {
 	private InputStream multipart;
 	private String fileType;
 
-	private static final String SEQ_SUFFIX = "-seq";
-	private static final String MANIFEST_SUFFIX = ".segments";
+	public static final String SEQ_SUFFIX = "-seq";
+	public static final String MANIFEST_SUFFIX = ".segments";
 
 	/**
 	 * Creates a frame with controls for downloading and previewing multi-part
@@ -162,8 +168,12 @@ public class Main extends JFrame {
 		} catch (MalformedURLException e) {
 			fileType = "";
 		}
-		int count = 0;
-		multipart = Multipart.openStream(url);
+		try {
+			multipart = Multipart.openStream(url);
+		} catch(Exception ex) {
+			progressLabel.setText("Downloading has encoutered a problem, failed!");
+			logger.fatal("Download failed!");
+		}
 		if (!isSequence)
 			downloadSingleFile();
 		else {
@@ -172,27 +182,12 @@ public class Main extends JFrame {
 			animateSlider.setValue(0);
 			animateSlider.setEnabled(true);
 			sliderLabel.setEnabled(true);
-			
-			// Get the manifest file that is addressed by url
-			ManifestFile manifestFile = new ManifestFile(url);
-			
-			// Read File
-			LinkedList<Segment> segments = manifestFile.readManifestFile();
-			
-			String fileSegemnts = "";
-			for (int i = 0; i < segments.size(); i++) {
-				fileSegemnts += "\n" + segments.get(i).getSegmentsContent();
 
-			}
-			
-			textView.setText(fileSegemnts);
-			scrollPane.setViewportView(textView);
-			// timer will be started and delay set by animate()
-//			timer = new Timer(1000, new ActionListener() {
-//				public void actionPerformed(ActionEvent e) {
-//					downloadNextFileFromSequence();
-//				}
-//			});
+			timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					downloadNextFileFromSequence();
+				}
+			});
 
 		}
 	}

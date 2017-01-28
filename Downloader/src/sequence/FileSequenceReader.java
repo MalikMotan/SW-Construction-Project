@@ -1,15 +1,17 @@
 package sequence;
 
-import java.io.DataInputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
+import org.apache.log4j.Logger;
+
+import java.io.*;
 
 /**
  * Static class for reading from a file-sequence stream.
  * 
  */
 public class FileSequenceReader {
+
+	final static Logger logger = Logger.getLogger(FileSequenceReader.class);
+
 	/**
 	 * Returns the data from the next sub-file in the given file sequence
 	 * stream.
@@ -23,23 +25,27 @@ public class FileSequenceReader {
 		// followed by the sub-file, followed by another size, followed by the
 		// sub-file,
 		// and so on until EOF
-		int dataSize;
-		try {
-			dataSize = new DataInputStream(sequence).readInt();
-			byte[] data = new byte[dataSize];
-			int totalNumOfReadBytes = 0;
-			while (totalNumOfReadBytes < dataSize) {
-				// Read more data
-				int numOfReadBytes = sequence.read(data, totalNumOfReadBytes, dataSize - totalNumOfReadBytes);
-				// Check that the file has not ended
-				if (numOfReadBytes == -1) // if no more data
-					throw new EOFException("End of file, number of read bytes is " + totalNumOfReadBytes);
-				totalNumOfReadBytes += numOfReadBytes;
+
+		logger.info("In function: FileSequenceReader.readOneFile()");
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		byte[] file = new byte[4];
+		if ((sequence.read(file)) != -1) {
+
+			String s = "";
+			for (byte b : file) {
+				s += Integer.toBinaryString(b & 0xFF);
 			}
-			return data;
-		} catch (EOFException e) { // data ends here
-			return null;
+			int size = Integer.parseInt(s, 2);
+			logger.debug("The size of the file is:" + size);
+
+			byte[] data = new byte[size];
+			int noOfReadBytes = sequence.read(data, 0, data.length);
+			buffer.write(data, 0, noOfReadBytes);
 		}
+		buffer.flush();
+		logger.info("Finished function: FileSequenceReader.readOneFile()");
+		return buffer.toByteArray();
 
 	}
+
 }
