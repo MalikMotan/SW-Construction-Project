@@ -26,7 +26,7 @@ public class FileSequenceReader {
 		// sub-file,
 		// and so on until EOF
 
-		logger.info("In function: FileSequenceReader.readOneFile()");
+		logger.trace("In function: FileSequenceReader.readOneFile()");
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] file = new byte[4];
 		if ((sequence.read(file)) != -1) {
@@ -43,7 +43,7 @@ public class FileSequenceReader {
 			buffer.write(data, 0, noOfReadBytes);
 		}
 		buffer.flush();
-		logger.info("Finished function: FileSequenceReader.readOneFile()");
+		logger.trace("Finished function: FileSequenceReader.readOneFile()");
 		return buffer.toByteArray();
 
 	}

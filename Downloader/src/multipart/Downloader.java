@@ -28,7 +28,7 @@ public class Downloader {
 	 * Downloads a file from url
 	 */
 	public InputStream download(String urlStr) throws Exception {
-		logger.info("In function Downloader.download()");
+		logger.trace("In function Downloader.download()");
 		InputStream inptStream = null;
 		if (!Validator.validateURL(urlStr)) {
 			throw new IOException("Invalid URL!");
@@ -48,7 +48,7 @@ public class Downloader {
 			getUrlContentAndMerge(inptStream, urlStr);
 		}
 
-		logger.info("Finished function download()");
+		logger.trace("Finished function download()");
 
 		return inptStream;
 	}
@@ -68,7 +68,7 @@ public class Downloader {
 	 */
 	public InputStream deepenDownload(InputStream inputStream, String[] urlContents) throws Exception// download
 	{
-		logger.info("In function manageDownload()");
+		logger.trace("In function manageDownload()");
 		InputStream innerSegment = null;
 		boolean success = false;
 		// Get the content from only one machine, if found, don'e get from
@@ -85,7 +85,6 @@ public class Downloader {
 						inputStream = innerSegment;
 					} else {
 						inputStream = new SequenceInputStream(inputStream, innerSegment);
-
 					}
 					success = true;
 					break; // Only from one machine
@@ -98,7 +97,7 @@ public class Downloader {
 			logger.trace("Failed downloading a file content in " + urlContents.toString());
 			throw new Exception("Failed!");
 		}
-		logger.info("Finished function manageDownload()");
+		logger.trace("Finished function manageDownload()");
 		return inputStream;
 	}
 
@@ -106,14 +105,14 @@ public class Downloader {
 	 * Get the content of a url, and merge it with others if any
 	 */
 	private void getUrlContentAndMerge(InputStream inptStream, String urlString) throws Exception {
-		logger.info("In function openUrlStreamAndMergeIt()");
+		logger.trace("In function openUrlStreamAndMergeIt()");
 		InputStream nextStream = new URL(urlString).openStream();
 		if (inptStream == null) { // If there is only one segment
 			inptStream = nextStream;
 		} else { // sequence
 			inptStream = new SequenceInputStream(inptStream, nextStream);
 		}
-		logger.info("Finished openUrlStreamAndMergeIt()");
+		logger.trace("Finished openUrlStreamAndMergeIt()");
 	}
 
 }

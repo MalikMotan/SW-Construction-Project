@@ -26,8 +26,6 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
-import data.ManifestFile;
-import data.Segment;
 import multipart.Multipart;
 import sequence.FileSequenceReader;
 
