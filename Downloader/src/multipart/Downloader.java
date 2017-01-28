@@ -45,7 +45,7 @@ public class Downloader {
 			}
 		} else {
 			logger.trace("The file in " + urlStr + " is a normal file");
-			getUrlContentAndMerge(inptStream, urlStr);
+			inptStream = getUrlContentAndMerge(inptStream, urlStr);
 		}
 
 		logger.trace("Finished function download()");
@@ -104,15 +104,16 @@ public class Downloader {
 	/**
 	 * Get the content of a url, and merge it with others if any
 	 */
-	private void getUrlContentAndMerge(InputStream inptStream, String urlString) throws Exception {
-		logger.trace("In function openUrlStreamAndMergeIt()");
+	private InputStream getUrlContentAndMerge(InputStream inptStream, String urlString) throws Exception {
+		logger.trace("In function getUrlContentAndMerge()");
 		InputStream nextStream = new URL(urlString).openStream();
 		if (inptStream == null) { // If there is only one segment
 			inptStream = nextStream;
 		} else { // sequence
 			inptStream = new SequenceInputStream(inptStream, nextStream);
 		}
-		logger.trace("Finished openUrlStreamAndMergeIt()");
+		logger.trace("Finished getUrlContentAndMerge()");
+		return inptStream;
 	}
 
 }
