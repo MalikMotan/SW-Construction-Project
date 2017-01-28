@@ -10,6 +10,7 @@ import java.io.*;
  */
 public class FileSequenceReader {
 
+	/** Logger used for testing and debugging purposes */
 	final static Logger logger = Logger.getLogger(FileSequenceReader.class);
 
 	/**
@@ -29,22 +30,31 @@ public class FileSequenceReader {
 		logger.trace("In function: FileSequenceReader.readOneFile()");
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] file = new byte[4];
+		byte[] data = null;
 		if ((sequence.read(file)) != -1) {
 
 			String s = "";
 			for (byte b : file) {
 				s += Integer.toBinaryString(b & 0xFF);
 			}
-			int size = Integer.parseInt(s, 2);
+			int size = new DataInputStream(sequence).readInt();//Integer.parseInt(s, 2);
 			logger.trace("The size of the file is:" + size);
 
-			byte[] data = new byte[size];
+			data = new byte[size];
 			int noOfReadBytes = sequence.read(data, 0, data.length);
-			buffer.write(data, 0, noOfReadBytes);
+			int readData = 0;
+			while (readData  < size) {
+				int readedStreamData = sequence.read(data, readData, size - readData);
+				if (readedStreamData == -1) {
+					throw new EOFException("Number of read data is more than the size!");
+				}
+				readData += readedStreamData;
+			}
+//			buffer.write(data, 0, noOfReadBytes);
 		}
 		buffer.flush();
 		logger.trace("Finished function: FileSequenceReader.readOneFile()");
-		return buffer.toByteArray();
+		return data;
 
 	}
 
