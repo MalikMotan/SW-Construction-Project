@@ -85,7 +85,6 @@ public class Downloader {
 						inputStream = innerSegment;
 					} else {
 						inputStream = new SequenceInputStream(inputStream, innerSegment);
-
 					}
 					success = true;
 					break; // Only from one machine
