@@ -36,7 +36,7 @@ public class FileSequenceReader {
 				s += Integer.toBinaryString(b & 0xFF);
 			}
 			int size = Integer.parseInt(s, 2);
-			logger.debug("The size of the file is:" + size);
+			logger.trace("The size of the file is:" + size);
 
 			byte[] data = new byte[size];
 			int noOfReadBytes = sequence.read(data, 0, data.length);

@@ -27,6 +27,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.log4j.Logger;
 
 import multipart.Multipart;
+import multipart.Validator;
 import sequence.FileSequenceReader;
 
 public class Main extends JFrame {
@@ -145,8 +146,13 @@ public class Main extends JFrame {
 		String url = urlField.getText();
 
 		boolean isSequence = false;
-		boolean isManifest = false;
 		try {
+			// Check if the url is valid
+			if(!Validator.isUrlExists(url)) {
+				logger.trace("The url is invalid!");
+				progressLabel.setText("The url you have entered is invalid!");
+				return;
+			}
 			String path = new URL(url).getPath();
 
 			if (path.endsWith(".cgi")) // ignore .cgi suffix
@@ -161,8 +167,12 @@ public class Main extends JFrame {
 												// -seq
 				path = path.substring(0, path.length() - SEQ_SUFFIX.length());
 			}
-			// file type is everything after last '.':
-			fileType = path.substring(path.lastIndexOf('.') + 1);
+			if(!path.substring(path.lastIndexOf('.') + 1).contains("part")) {
+				// file type is everything after last '.':
+				fileType = path.substring(path.lastIndexOf('.') + 1);
+			} else {
+				fileType = path.substring(path.lastIndexOf('.')-3, path.lastIndexOf('.'));
+			}
 		} catch (MalformedURLException e) {
 			fileType = "";
 		}

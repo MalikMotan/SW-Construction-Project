@@ -1,6 +1,7 @@
 package multipart;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -26,19 +27,38 @@ public class Validator {
 	 */
 	public static boolean validateURL(String urlStr) {
 		try {
-			logger.trace("Validating url: "+urlStr);
+			logger.trace("Validating url: " + urlStr);
 			URL url = new URL(urlStr); // Get a url object
-			URLConnection urlConnection = url.openConnection(); // open a connection
+			URLConnection urlConnection = url.openConnection(); // open a
+																// connection
 			urlConnection.connect(); // connect
-			logger.trace("url: "+urlStr+" is valid!");
+			logger.trace("url: " + urlStr + " is valid!");
 			return true;
 		} catch (MalformedURLException e) {
-			logger.trace("url: "+urlStr+" is invalid!");
+			logger.trace("url: " + urlStr + " is invalid!");
 			return false;
 		} catch (IOException e) {
-			logger.trace("url: "+urlStr+" is invalid!");
+			logger.trace("url: " + urlStr + " is invalid!");
 			return false;
 		}
+	}
+
+	/**
+	 * Check if the webpage of the url exits
+	 * @param urlStr
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
+	public static boolean isUrlExists(String urlStr) throws MalformedURLException, IOException {
+		if(validateURL(urlStr)) {
+			HttpURLConnection connection = (HttpURLConnection) (new URL(urlStr)).openConnection();
+			if (connection.getResponseCode() != 404) {
+				logger.trace("The URL is of a valid webpage:" + urlStr);
+				return true;
+			} 
+		}
+		return false;
 	}
 
 }
