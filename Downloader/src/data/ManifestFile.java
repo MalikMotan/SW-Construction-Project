@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class ManifestFile {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public LinkedList<Segment> readManifestFile() throws IOException, MalformedURLException {
+	public List<String> readManifestFile() throws IOException, MalformedURLException {
 		logger.trace("Reading the manifest file with path: " + manifestPath);
 
 		URL url = new URL(manifestPath);
@@ -43,13 +44,13 @@ public class ManifestFile {
 		while ((line = manifestFileData.readLine()) != null) {
 			// Exclude the separator (**)
 			if (!line.equals(separator)) {
-				innerSegmentsUrlList.add(line);
+				innerSegmentsUrlList.add(line + ";");
 			}
 		}
 		logger.trace("Finished reading the manifest file with path: " + manifestPath);
 
 		LinkedList<String> innerUrlsList = refineSegmentsUrls(innerSegmentsUrlList);
-		LinkedList<Segment> segments = readSegmentsUrls(innerUrlsList);
+		LinkedList<String> segments = readSegmentsUrls(innerUrlsList);
 		manifestFileData.close();
 		return segments;
 	}
@@ -61,14 +62,14 @@ public class ManifestFile {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public LinkedList<Segment> readSegmentsUrls(LinkedList<String> innerUrlsList)
+	public LinkedList<String> readSegmentsUrls(LinkedList<String> innerUrlsList)
 			throws IOException, MalformedURLException {
 		logger.trace("Reading the segments of the manifest file with path: " + manifestPath);
 
-		LinkedList<Segment> segmentsData = new LinkedList<Segment>();
+		LinkedList<String> segmentsData = new LinkedList<String>();
 
 		for (String innerUrl : innerUrlsList) {
-			segmentsData.add(new Segment(innerUrl));
+			segmentsData.add(innerUrl);
 		}
 
 		logger.trace("Finished reading the segments of the manifest file with path: " + manifestPath);

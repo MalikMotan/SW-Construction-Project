@@ -30,10 +30,13 @@ public class Validator {
 			URL url = new URL(urlStr); // Get a url object
 			URLConnection urlConnection = url.openConnection(); // open a connection
 			urlConnection.connect(); // connect
+			logger.trace("url: "+urlStr+" is valid!");
 			return true;
 		} catch (MalformedURLException e) {
+			logger.trace("url: "+urlStr+" is invalid!");
 			return false;
 		} catch (IOException e) {
+			logger.trace("url: "+urlStr+" is invalid!");
 			return false;
 		}
 	}

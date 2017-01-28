@@ -26,13 +26,14 @@ public class Multipart {
 	 * <p>
 	 * Otherwise, when the url does not point to a manifest, the returned input
 	 * stream streams data directly from the url target.
+	 * @throws Exception 
 	 */
-	public static InputStream openStream(String url) throws IOException {
+	public static InputStream openStream(String url) throws Exception {
 		InputStream inputStream = null;
 		if (Validator.validateURL(url)) {
 			logger.trace("The url " + url + " is valid!");
 			logger.trace("Openning stream for URL: " + url);
-			inputStream = new URL(url).openStream();
+			inputStream = new Downloader().download(url);
 		} else {
 			logger.trace("The url " + url + " is invalid!");
 		}
